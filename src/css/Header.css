@@ -1,0 +1,24 @@
+.logo {
+    height: 60px;
+}
+
+header {
+    background-color: white;
+}
+
+html,body {
+    background-color: #F3F5FA;
+    height: 100%;
+}
+
+hr {
+    margin: 0;
+}
+
+.full-height {
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}

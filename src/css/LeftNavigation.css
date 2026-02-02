@@ -1,0 +1,33 @@
+.leftNav {
+    width: 20%;
+    border-right: 1px #E4E6ED solid;
+    
+    ul {
+        padding: 0;
+        margin-top: 0;
+    }
+
+    li {
+        list-style: none;
+        height: 35px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    a {
+        text-decoration: none;
+        display: block;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a.active {
+        background-color: #2986DE; /* change this to your highlight color */
+        color: white;
+    }
+
+    li:last-of-type {
+        border-bottom: none;
+    }
+}
