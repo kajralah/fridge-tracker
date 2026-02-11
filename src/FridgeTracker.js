@@ -6,8 +6,6 @@ import Products from './Products';
 export default function FridgeTracker() {
   const { productType } = useParams();
 
-
-
   return (
     <div className="full-height">
       <Header />

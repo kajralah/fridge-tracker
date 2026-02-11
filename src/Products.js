@@ -18,7 +18,7 @@ import deleteIcon from "./img/delete-button.svg";
     const addProduct = async (product) => {
         const { error } = await createProduct(product)
         const data = (!error) && fetchProducts(productType)
-        if (data) setProducts(data)
+        if (data) loadProducts()
     }
 
     useEffect(() => {

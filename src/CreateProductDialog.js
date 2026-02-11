@@ -11,6 +11,7 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
       alert('Fill all fields!')
       return
     }
+  
     onAdd({ name, qty, category, expiration })
     setName('')
     setQty(1)
@@ -28,15 +29,15 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center'
     }}>
       <div style={{
-        backgroundColor: 'white', padding: '20px', borderRadius: '8px', minWidth: '300px'
+        backgroundColor: 'white', padding: '0 20px 20px', borderRadius: '8px', minWidth: '300px'
       }}>
-        <h2>Add Product</h2>
+        <h2 style={{textAlign: 'center'}}>Add Product</h2>
         <input
           type="text"
           placeholder="Product Name"
           value={name}
           onChange={e => setName(e.target.value)}
-          style={{ width: '100%', marginBottom: '10px' }}
+          style={{ width: '100%',height: '25px', marginBottom: '10px' }}
         />
         <input
           type="number"
@@ -44,12 +45,12 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
           min="1"
           value={qty}
           onChange={e => setQty(Number(e.target.value))}
-          style={{ width: '100%', marginBottom: '10px' }}
+          style={{ width: '10%', marginBottom: '10px', height: '22px' }}
         />
         <select
           value={category}
           onChange={e => setCategory(e.target.value)}
-          style={{ width: '100%', marginBottom: '10px' }}
+          style={{ width: '45%', marginBottom: '10px', marginLeft: '10px', height: '25px' }}
         >
           <option value="Pantry">Pantry</option>
           <option value="Fridge">Fridge</option>
@@ -59,11 +60,11 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
           type="date"
           value={expiration}
           onChange={e => setExpiration(e.target.value)}
-          style={{ width: '100%', marginBottom: '10px' }}
+          style={{ width: '100%', marginBottom: '10px', width: '39%', marginLeft: '10px', height: '25px' }}
         />
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} style={{ marginRight: '10px' }}>Cancel</button>
-          <button onClick={handleAdd}>Add</button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button onClick={onClose} style={{ marginRight: '10px', width: '30%' }}>Cancel</button>
+          <button onClick={handleAdd} style={{ width: '30%' }}>Add</button>
         </div>
       </div>
     </div>
