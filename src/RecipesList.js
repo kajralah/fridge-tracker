@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
 import Header from './Header';
 import LeftNavigation from './LeftNavigation';
 import CreateRecipeDialog from "./CreateRecipeDialog";

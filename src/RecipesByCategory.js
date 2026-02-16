@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
 import Header from './Header';
 import LeftNavigation from './LeftNavigation';
 import { useNavigate, useParams } from "react-router-dom";
+import { getRecipes, getCategoryId } from './api/recipes';
 
 export default function RecipesByCategory() {
   const { categoryName } = useParams();
@@ -10,37 +10,18 @@ export default function RecipesByCategory() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch recipes from Supabase
   const fetchRecipes = async () => {
     setLoading(true);
 
-   const { data: category, error: catError } = await supabase
-      .from("categories")
-      .select("id")
-      .eq("name", categoryName)
-      .single(); // expect only one match
+    const { data: category, error: catError } = await getCategoryId(categoryName);
 
     if (catError || !category) {
-      console.error("Category not found");
       setRecipes([]);
       setLoading(false);
       return;
     }
 
-    const { data, error } = await supabase
-      .from("recipes")
-      .select(`
-        id,
-        name,
-        instructions,
-        cook_time,
-        image_url,
-        recipe_ingredients (
-          quantity,
-          unit,
-          ingredients ( name )
-        )
-      `).eq("category_id", category.id);
+    const { data, error } = await getRecipes(category.id);
 
     if (error) {
       console.error("Error fetching recipes:", error);
@@ -48,7 +29,7 @@ export default function RecipesByCategory() {
     } else {
       setRecipes(data);
     }
-    setLoading(false);
+      setLoading(false);
   };
 
   useEffect(() => {
@@ -67,7 +48,6 @@ export default function RecipesByCategory() {
             <ul style={{ listStyle: "none", padding: 0, maxWidth: 600 }}>
                 {recipes.map((recipe) => (
                     <li key={recipe.id} style={{ marginBottom: "10px", borderBottom: "1px solid #ccc" }}>
-                    {/* Recipe Name */}
                     <div
                         onClick={() => navigate(`/recipes/${recipe.id}`)}
                         style={{
@@ -101,4 +81,3 @@ export default function RecipesByCategory() {
     </div>
   );
 }
-

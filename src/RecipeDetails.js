@@ -2,82 +2,88 @@ import Header from './Header';
 import LeftNavigation from './LeftNavigation';
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { supabase } from "./supabaseClient";
+import { getRecipes } from './api/recipes';
+import cookTimeIcon from "./img/cook_time.png";
+import './css/RecipeDetails.css';
 
 export default function RecipeDetails() {
 
-  const { id } = useParams();
-  const [recipe, setRecipe] = useState(null);
-  const [loading, setLoading] = useState(true);
- 
-useEffect(() => {
-    fetchRecipe();
-  }, [id]);
+    const { id } = useParams();
+    const [recipe, setRecipe] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [checked, setChecked] = useState({});
 
-  const fetchRecipe = async () => {
-    setLoading(true);
+    useEffect(() => {
+        fetchRecipe();
+    }, [id]);
 
-    const { data, error } = await supabase
-      .from("recipes")
-      .select(`
-        id,
-        name,
-        instructions,
-        cook_time,
-        image_url,
-        recipe_ingredients (
-          quantity,
-          unit,
-          ingredients ( name )
-        )
-      `)
-      .eq("id", id)
-      .single();
+    const fetchRecipe = async () => {
+        setLoading(true);
 
-    if (!error) setRecipe(data);
-    setLoading(false);
-  };
+        const { data, error } = await getRecipes(null, id);
 
-  if (loading) return <p>Loading...</p>;
-  if (!recipe) return <p>Recipe not found</p>;
+        if (!error) setRecipe(data);
+        setLoading(false);
+    };
 
-  return (
-    <div className="full-height">
-        <Header />
-        <hr/>
-        <div style={{display: 'flex', flexDirection: 'row'}} className="full-height">
-            <LeftNavigation />
-            <div>
-                <Link to="/recipes">← Back to recipes</Link>
+    if (loading) return <p>Loading...</p>;
+    if (!recipe) return <p>Recipe not found</p>;
 
-                <div style={{ padding: "10px 15px" }}>
-                    {recipe.image_url && (
-                        <img
-                        src={recipe.image_url}
-                        alt={recipe.name}
-                        style={{ width: "200px", height: "150px", objectFit: "cover", borderRadius: 8, marginBottom: 10 }}
-                        />
-                    )}
-                    <p><strong>Description:</strong> {recipe.description || "No description"}</p>
-                    <p><strong>Cook Time:</strong> {recipe.cook_time || "N/A"} mins</p>
-                    <p><strong>Servings:</strong> {recipe.servings || "N/A"}</p>
-                    <p><strong>Instructions:</strong> {recipe.instructions}</p>
+    const toggle = (index) => {
+        setChecked((prev) => ({
+            ...prev,
+            [index]: !prev[index],
+        }));
+    };
 
-                    {recipe.recipe_ingredients?.length > 0 && (
-                        <>
-                        <strong>Ingredients:</strong>
-                        <ul>
-                            {recipe.recipe_ingredients.map((ri, idx) => (
-                            <li key={idx}>
-                                {ri.quantity} {ri.unit} {ri.ingredients.name}
-                            </li>
-                            ))}
-                        </ul>
-                        </>
-                    )}
+    return (
+        <div className="full-height">
+            <Header />
+            <hr/>
+            <div style={{display: 'flex', flexDirection: 'row'}} className="full-height">
+                <LeftNavigation />
+                <div>
+                    <Link to="/recipes" style={{marginLeft: '20px'}}>← Back to recipes</Link>
+
+                    <div style={{ padding: "10px 15px" }}>
+                        <div style={{ display: "flex", gap: "30px", alignItems: "center"}}>
+                            {recipe.image_url && (
+                                <img
+                                src={recipe.image_url}
+                                alt={recipe.name}
+                                style={{ width: "350px", height: "350px", objectFit: "cover", borderRadius: 8, marginBottom: 10 }}
+                                />
+                            )}
+                            <div>
+                                {recipe.recipe_ingredients?.length > 0 && (
+                                    <div className="ingredients-list">
+                                        <strong>Ingredients:</strong>
+                                        <ul>
+                                            {recipe.recipe_ingredients.map((ri, idx) => (
+                                                <li key={idx} className={checked[idx] ? "checked" : ""}>
+                                                    <label>
+                                                        <input
+                                                        type="checkbox"
+                                                        checked={!!checked[idx]}
+                                                        onChange={() => toggle(idx)}
+                                                        />
+                                                        <span>{ri.quantity} {ri.unit} {ri.ingredients.name}</span>
+                                                    </label>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                            <div style={{height: '100%'}}>
+                                <p style={{display: 'flex'}}><img src={cookTimeIcon} class="icon"/> {recipe.cook_time || "N/A"} mins</p>
+                                {recipe.servings ? <p><strong>Servings:</strong> {recipe.serving}</p> : ""}
+                            </div>
+                        </div>
+                        <p><strong>Instructions:</strong> {recipe.instructions}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-  );
+    );
 }
