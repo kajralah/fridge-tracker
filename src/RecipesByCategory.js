@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from './Header';
 import LeftNavigation from './LeftNavigation';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { getRecipes, getCategoryId } from './api/recipes';
 
 export default function RecipesByCategory() {
@@ -37,7 +37,11 @@ export default function RecipesByCategory() {
   }, [categoryName]);
   
   if (loading) return <p>Loading recipes...</p>;
-  if (recipes.length === 0) return <p>No recipes found.</p>
+  if (recipes.length === 0) 
+    return <div>
+      <Link to="/recipes" style={{marginLeft: '20px'}}>← Back to recipes</Link>
+      <p>No recipes found.</p>
+    </div>
 
   return (
     <div className="full-height">
