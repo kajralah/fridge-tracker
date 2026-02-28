@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/fridge-tracker/static/css/main.02d12f42.css",
-    "main.js": "/fridge-tracker/static/js/main.146bc10c.js",
+    "main.css": "/fridge-tracker/static/css/main.345273db.css",
+    "main.js": "/fridge-tracker/static/js/main.f2573b01.js",
     "static/js/453.4ad473f9.chunk.js": "/fridge-tracker/static/js/453.4ad473f9.chunk.js",
     "static/media/logo.png": "/fridge-tracker/static/media/logo.917f73693937040a09fa.png",
     "static/media/cook_time.png": "/fridge-tracker/static/media/cook_time.2269a661fb768a50ab72.png",
     "static/media/delete-button.svg": "/fridge-tracker/static/media/delete-button.212c8821d736f8b11fbebad7e3d13d5b.svg",
     "index.html": "/fridge-tracker/index.html",
-    "main.02d12f42.css.map": "/fridge-tracker/static/css/main.02d12f42.css.map",
-    "main.146bc10c.js.map": "/fridge-tracker/static/js/main.146bc10c.js.map",
+    "main.345273db.css.map": "/fridge-tracker/static/css/main.345273db.css.map",
+    "main.f2573b01.js.map": "/fridge-tracker/static/js/main.f2573b01.js.map",
     "453.4ad473f9.chunk.js.map": "/fridge-tracker/static/js/453.4ad473f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.02d12f42.css",
-    "static/js/main.146bc10c.js"
+    "static/css/main.345273db.css",
+    "static/js/main.f2573b01.js"
   ]
 }
