@@ -16,7 +16,7 @@ import editIcon from "./img/edit.png";
             setProducts(data)
         });
     }
-w
+
     const addProduct = async (product) => {
         let data;
         let result;
