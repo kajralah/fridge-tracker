@@ -49,6 +49,11 @@ tr {
     height: 25px;
 }
 
+.editIcon {
+    width: 40px;
+    height: 25px;
+}
+
 .expired {
     background-color: #DD5840;
 

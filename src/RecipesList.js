@@ -29,10 +29,20 @@ export default function RecipesList() {
   }, []);
 
   if (loading) return <p>Loading recipes...</p>;
-  if (recipes.length === 0) return <p>No recipes found.</p>;
+  if (recipes.length === 0) return (
+    <div className="recipesContainer">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+            <button className="createButton" onClick={() => setOpenDialog(true)}>+ Create Recipe</button>
+        </div>
+        <CreateRecipeDialog
+            isOpen={openDialog}
+            onClose={() => setOpenDialog(false)}
+        />
+        <p>No recipes found.</p>
+    </div>);
 
   return (
-    <div className="full-height">
+    <div className="full-height wrapper">
         <Header />
         <hr/>
         <div className="recipesListContainer full-height">
@@ -44,9 +54,6 @@ export default function RecipesList() {
                 <CreateRecipeDialog
                     isOpen={openDialog}
                     onClose={() => setOpenDialog(false)}
-                    onRecipeCreated={(newRecipe) => {
-                    console.log("New recipe created:", newRecipe);
-                    }}
                 />
                 <ul className="recipes-grid">
                     {recipes.map((recipe) => (

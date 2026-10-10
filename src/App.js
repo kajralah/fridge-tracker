@@ -9,6 +9,7 @@ function App() {
     <BrowserRouter>
         <Routes>
           <Route path="/" element={<FridgeTracker />} />
+          <Route path="/fridge-tracker" element={<FridgeTracker />} />
           <Route path="/:productType" element={<FridgeTracker />} />
           <Route path="/recipes" element={<RecipesList />} />
           <Route path="/recipes/:id" element={<RecipeDetails />} />

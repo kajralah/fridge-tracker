@@ -1,23 +1,37 @@
 import { useState, useEffect } from 'react';
-import { fetchProducts, deleteProduct, createProduct } from './api/products';
+import { fetchProducts, deleteProduct, createProduct, editProduct } from './api/products';
 import CreateProductDialog from './CreateProductDialog';
 import FoodStatus from './FoodStatus';
 import './css/Products.css';
 import deleteIcon from "./img/delete-button.svg";
+import editIcon from "./img/edit.png";
 
  export default function Products({productType}) {
     const [products, setProducts] = useState([])
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     const loadProducts = () => {
         fetchProducts(productType).then((data) => {
             setProducts(data)
         });
     }
-
+w
     const addProduct = async (product) => {
-        const { error } = await createProduct(product)
-        const data = (!error) && fetchProducts(productType)
+        let data;
+        let result;
+
+        if (product.isEdit) {
+            result = await editProduct(product);
+        } else {
+            console.log(product)
+            const {isEdit, id, ...newProduct} = product;
+
+            result = await createProduct(newProduct)
+        }
+        
+        data = (!result.error) && fetchProducts(productType)
+
         if (data) loadProducts()
     }
 
@@ -31,10 +45,15 @@ import deleteIcon from "./img/delete-button.svg";
         loadProducts();
     }
 
+    const handleEdit = async (product) => {
+        setSelectedProduct(product);
+        setDialogOpen(true);
+    }
+
     return (
         <div className="container">
-            <div class="container-header">
-                <h2>Fridge items</h2>
+            <div className="container-header">
+                <h2>Items</h2>
                 <button className="addButton" onClick={() => setDialogOpen(true)}>
                     + Add Product
                 </button>
@@ -67,8 +86,8 @@ import deleteIcon from "./img/delete-button.svg";
                             <FoodStatus expiryDate={p.expiration} />
                         </td>
                         <td>
-                        {/* For future - edit button */}
-                            <img src={deleteIcon} data-productid={p.id} onClick={handleRemove} alt="Delete" class="icon"/>
+                            <img src={editIcon} onClick={() => {handleEdit(p)}} alt="Edit" className="editIcon"/>
+                            <img src={deleteIcon} data-productid={p.id} onClick={handleRemove} alt="Delete" className="icon"/>
                         </td>
                     </tr>
                     )).sort((a,b) => {return a.expiration > b.expiration})}
@@ -78,6 +97,7 @@ import deleteIcon from "./img/delete-button.svg";
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
                 onAdd={addProduct}
+                initialData={selectedProduct}
             />
         </div>
     )

@@ -9,11 +9,9 @@ export async function getRecipes(categoryId, recipeId) {
         cook_time,
         image_url,
         recipe_ingredients (
-          quantity,
-          unit,
-          ingredients ( name )
+          ingredient_name
         )
-    `);
+    `).order('name', { ascending: true });
 
     if (categoryId && categoryId.trim() !== "") {
       query = query.eq("category_id", categoryId);
@@ -45,8 +43,18 @@ export async function insertRecipe(form, imageUrl) {
     category_id: form.category_id,
     cook_time: form.cook_time,
     instructions: form.instructions,
-    image_url: imageUrl,
+    image_url: imageUrl
   }).select().single();
+}
+
+export async function insertIngredients(ingredientRows) {
+  return supabase
+    .from("recipe_ingredients")
+    .insert(ingredientRows);
+}
+
+export async function deleteRecipe(id) {
+    return supabase.from("recipes").delete().eq('id', id).select();
 }
 
 export async function uploadImage(fileName, formImg) {

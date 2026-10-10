@@ -1,18 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function CreateProductDialog({ open, onClose, onAdd }) {
+export default function CreateProductDialog({ open, onClose, onAdd, initialData }) {
+  const id = initialData?.id;
   const [name, setName] = useState('')
   const [qty, setQty] = useState(1)
   const [category, setCategory] = useState('Pantry')
   const [expiration, setExpiration] = useState('')
+  const isEdit = Boolean(initialData);
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name ?? "");
+      setQty(initialData.qty ?? 0);
+      setCategory(initialData.category);
+      setExpiration(initialData.expiration);
+    }
+  }, [initialData]);
 
   const handleAdd = () => {
     if (!name || !qty || !category || !expiration) {
       alert('Fill all fields!')
       return
     }
+
+    const id = initialData?.id;
   
-    onAdd({ name, qty, category, expiration })
+    onAdd({ name, qty, category, expiration, id, isEdit })
     setName('')
     setQty(1)
     setCategory('Pantry')
@@ -31,7 +44,7 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
       <div style={{
         backgroundColor: 'white', padding: '0 20px 20px', borderRadius: '8px', minWidth: '300px'
       }}>
-        <h2 style={{textAlign: 'center'}}>Add Product</h2>
+        <h2 style={{textAlign: 'center'}}>{isEdit ? 'Edit Product' : 'Add Product'}</h2>
         <input
           type="text"
           placeholder="Product Name"
@@ -64,7 +77,7 @@ export default function CreateProductDialog({ open, onClose, onAdd }) {
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <button onClick={onClose} style={{ marginRight: '10px', width: '30%' }}>Cancel</button>
-          <button onClick={handleAdd} style={{ width: '30%' }}>Add</button>
+          <button onClick={() => handleAdd(isEdit)} style={{ width: '30%' }}> {isEdit ? 'Edit' : 'Add'}</button>
         </div>
       </div>
     </div>

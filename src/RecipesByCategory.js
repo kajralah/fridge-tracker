@@ -3,6 +3,7 @@ import Header from './Header';
 import LeftNavigation from './LeftNavigation';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { getRecipes, getCategoryId } from './api/recipes';
+import './css/RecipesList.css';
 
 export default function RecipesByCategory() {
   const { categoryName } = useParams();
@@ -44,43 +45,45 @@ export default function RecipesByCategory() {
     </div>
 
   return (
-    <div className="full-height">
+    <div className="full-height wrapper">
         <Header />
         <hr/>
-        <div style={{display: 'flex', flexDirection: 'row'}} className="full-height">
+        <div className="recipesListContainer full-height">
             <LeftNavigation />
-            <ul style={{ listStyle: "none", padding: 0, maxWidth: 600 }}>
-                {recipes.map((recipe) => (
-                    <li key={recipe.id} style={{ marginBottom: "10px", borderBottom: "1px solid #ccc" }}>
-                    <div
-                        onClick={() => navigate(`/recipes/${recipe.id}`)}
-                        style={{
-                        cursor: "pointer",
-                        padding: "10px",
-                        backgroundColor: "#fff",
-                        fontWeight: "bold",
-                        display: "flex",
-                        alignItems: "center"
-                        }}
-                    >
-                        {recipe.image_url && (
-                            <img
-                                src={recipe.image_url}
-                                alt={recipe.name}
-                                style={{
-                                width: 50,
-                                height: 50,
-                                objectFit: "cover",
-                                borderRadius: 6,
-                                marginRight: 10,
-                                }}
-                            />
-                        )}
-                        <h2>{recipe.name}</h2>
-                    </div>
-                    </li>
-                ))}
-            </ul>
+            <div className="recipesContainer">
+              <ul className="recipes-grid">
+                  {recipes.map((recipe) => (
+                      <li key={recipe.id} style={{ marginBottom: "10px", borderBottom: "1px solid #ccc" }}>
+                      <div
+                          onClick={() => navigate(`/recipes/${recipe.id}`)}
+                          style={{
+                          cursor: "pointer",
+                          padding: "10px",
+                          backgroundColor: "#fff",
+                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center"
+                          }}
+                      >
+                          {recipe.image_url && (
+                              <img
+                                  src={recipe.image_url}
+                                  alt={recipe.name}
+                                  style={{
+                                  width: 50,
+                                  height: 50,
+                                  objectFit: "cover",
+                                  borderRadius: 6,
+                                  marginRight: 10,
+                                  }}
+                              />
+                          )}
+                          <h2>{recipe.name}</h2>
+                      </div>
+                      </li>
+                  ))}
+              </ul>
+            </div>
         </div>
     </div>
   );

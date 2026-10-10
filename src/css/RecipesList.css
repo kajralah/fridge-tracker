@@ -51,3 +51,9 @@
     font-size: 15px;
     width: 30%;
 }
+
+th, tr {
+  @media screen and (max-width: 768px) {
+    font-size: 12px;
+  }
+}

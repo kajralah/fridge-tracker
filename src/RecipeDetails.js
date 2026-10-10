@@ -12,6 +12,8 @@ export default function RecipeDetails() {
     const [recipe, setRecipe] = useState(null);
     const [loading, setLoading] = useState(true);
     const [checked, setChecked] = useState({});
+    const [cookTimeHours, setCookTimeHours] = useState(0);
+    const [cookTimeMinutes, setCookTimeMinutes] = useState(0);
 
     useEffect(() => {
         fetchRecipe();
@@ -23,6 +25,8 @@ export default function RecipeDetails() {
         const { data, error } = await getRecipes(null, id);
 
         if (!error) setRecipe(data);
+        setCookTimeHours(Math.floor(data.cook_time / 60));
+        setCookTimeMinutes(data.cook_time % 60);
         setLoading(false);
     };
 
@@ -37,7 +41,7 @@ export default function RecipeDetails() {
     };
 
     return (
-        <div className="full-height">
+        <div className="full-height wrapper">
             <Header />
             <hr/>
             <div style={{display: 'flex', flexDirection: 'row'}} className="full-height">
@@ -67,7 +71,7 @@ export default function RecipeDetails() {
                                                         checked={!!checked[idx]}
                                                         onChange={() => toggle(idx)}
                                                         />
-                                                        <span>{ri.quantity} {ri.unit} {ri.ingredients.name}</span>
+                                                        <span>{ri.ingredient_name}</span>
                                                     </label>
                                                 </li>
                                             ))}
@@ -76,11 +80,11 @@ export default function RecipeDetails() {
                                 )}
                             </div>
                             <div style={{height: '100%'}}>
-                                <p style={{display: 'flex'}}><img src={cookTimeIcon} class="icon"/> {recipe.cook_time || "N/A"} mins</p>
+                                <p style={{display: 'flex'}}><img src={cookTimeIcon} class="icon"/> {cookTimeHours > 0 ? cookTimeHours + "h " + (cookTimeMinutes > 0 ? cookTimeMinutes + " min" : "") : cookTimeMinutes + " min"  || "N/A"}</p>
                                 {recipe.servings ? <p><strong>Servings:</strong> {recipe.serving}</p> : ""}
                             </div>
                         </div>
-                        <p><strong>Instructions:</strong> {recipe.instructions}</p>
+                        <p className="recipe-instructions"><strong>Instructions:</strong> {recipe.instructions}</p>
                     </div>
                 </div>
             </div>

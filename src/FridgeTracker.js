@@ -7,7 +7,7 @@ export default function FridgeTracker() {
   const { productType } = useParams();
 
   return (
-    <div className="full-height">
+    <div className="full-height wrapper">
       <Header />
       <hr/>
       <div style={{display: 'flex', flexDirection: 'row'}} className="full-height">

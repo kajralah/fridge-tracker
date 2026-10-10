@@ -6,7 +6,7 @@ export async function getProducts(productType) {
     .select('*')
     .order('expiration', { ascending: true });
 
-  if (productType && productType.trim() !== "") {
+  if (productType && productType.trim() !== "" && productType !== 'Fridge-tracker') {
       productType = productType.charAt(0).toUpperCase() + productType.slice(1);
       query = query.eq("category", productType);
   }
@@ -18,6 +18,18 @@ export async function createProduct(product) {
   return supabase
     .from('products')
     .insert([product])
+}
+
+export async function editProduct(product) {
+  return supabase 
+    .from('products')
+      .update({
+        name: product.name,
+        qty: product.qty,
+        category: product.category,
+        expiration: product.expiration
+      })
+      .eq("id", product.id);
 }
 
 export async function deleteProduct(id) {

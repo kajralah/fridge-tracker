@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchCategories, insertRecipe, uploadImage, getImagePublicUrl } from './api/recipes';
+import { fetchCategories, insertRecipe, uploadImage, getImagePublicUrl, insertIngredients } from './api/recipes';
 import { resizeImage } from './helpers/imageHelper';
 
 export default function CreateRecipeDialog({ isOpen, onClose, onRecipeCreated }) {
@@ -10,6 +10,7 @@ export default function CreateRecipeDialog({ isOpen, onClose, onRecipeCreated })
     cook_time: "",
     instructions: "",
     image: null,
+    ingredients: []
   });
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +31,26 @@ export default function CreateRecipeDialog({ isOpen, onClose, onRecipeCreated })
     }
   };
 
+  const [ingredientInput, setIngredientInput] = useState("");
+
+  const addIngredient = () => {
+    if (!ingredientInput.trim()) return;
+
+    setForm((prev) => ({
+      ...prev,
+      ingredients: [...prev.ingredients, ingredientInput.trim()],
+    }));
+
+    setIngredientInput("");
+  };
+
+  const removeIngredient = (index) => {
+    setForm((prev) => ({
+      ...prev,
+      ingredients: prev.ingredients.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,11 +67,25 @@ export default function CreateRecipeDialog({ isOpen, onClose, onRecipeCreated })
         imageUrl = data.publicUrl;
       }
 
-      const { data, error } = insertRecipe(form, imageUrl);
+      const { data, error } = await insertRecipe(form, imageUrl);
 
       if (error) throw error;
 
       if (onRecipeCreated) onRecipeCreated(data);
+
+      if (form.ingredients.length > 0) {
+        const ingredientRows = form.ingredients.map((name) => ({
+          recipe_id: data.id,
+          ingredient_name: name,
+        }));
+
+        const { error } = await insertIngredients(ingredientRows);
+
+        if (error) {
+          console.error(error);
+          return; 
+        }
+      }
 
       setForm({ name: "", category_id: "", cook_time: "", instructions: "", image: null });
       onClose();
@@ -111,12 +146,39 @@ export default function CreateRecipeDialog({ isOpen, onClose, onRecipeCreated })
             style={{ width: "100%", marginBottom: 10 }}
           />
 
+          <label>Ingredients</label>
+
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <input
+              type="text"
+              placeholder="e.g. 2 eggs"
+              value={ingredientInput}
+              onChange={(e) => setIngredientInput(e.target.value)}
+            />
+            <button type="button" onClick={addIngredient}>
+              Add
+            </button>
+          </div>
+
+          <ul className="ingredients-preview">
+            {form.ingredients.map((ingredient, index) => (
+              <li key={index}>
+                {ingredient}
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(index)}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+
           <label>Instructions:</label>
           <textarea
             name="instructions"
             value={form.instructions}
             onChange={handleChange}
-            required
             rows={4}
             style={{ width: "100%", marginBottom: 10 }}
           />

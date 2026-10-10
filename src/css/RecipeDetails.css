@@ -2,3 +2,7 @@
   text-decoration: line-through;
   color: #888;
 }
+
+.recipe-instructions {
+  white-space: pre-line;
+}
