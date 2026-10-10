@@ -4,7 +4,7 @@ import LeftNavigation from "./LeftNavigation";
 import CreateRecipeDialog from "./CreateRecipeDialog";
 import { useNavigate } from "react-router-dom";
 import { getRecipes } from "./api/recipes";
-import cookTimeIcon from "./path/to/cookTimeIcon.png";
+import cookTimeIcon from "./cook_time.png";
 import "./css/RecipesList.css";
 
 export default function RecipesList() {
