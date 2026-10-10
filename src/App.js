@@ -1,12 +1,12 @@
 import FridgeTracker from './FridgeTracker'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import RecipesList from './RecipesList';
 import RecipeDetails from './RecipeDetails';
 import RecipesByCategory from './RecipesByCategory';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
         <Routes>
           <Route path="/" element={<FridgeTracker />} />
           <Route path="/fridge-tracker" element={<FridgeTracker />} />
@@ -18,7 +18,7 @@ function App() {
               element={<RecipesByCategory />}
             />
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );  
 }
 
